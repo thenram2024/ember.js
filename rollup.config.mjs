@@ -118,6 +118,7 @@ function sharedESMConfig({ input, debugMacrosMode, includePackageMeta = false })
       format: 'es',
       dir: outputDir,
       hoistTransitiveImports: false,
+      preserveModules: true,
       generatedCode: 'es2015',
       chunkFileNames: 'packages/shared-chunks/[name]-[hash].js',
     },
@@ -266,7 +267,6 @@ function rolledUpPackages() {
 export function exposedDependencies() {
   return {
     'backburner.js': require.resolve('backburner.js/dist/es6/backburner.js'),
-    rsvp: require.resolve('rsvp/lib/rsvp.js'),
     'dag-map': require.resolve('dag-map/dag-map.js'),
     router_js: require.resolve('router_js'),
     'route-recognizer': require.resolve('route-recognizer/dist/route-recognizer.es.js'),
@@ -426,6 +426,10 @@ export function resolvePackages(deps, params) {
           return { external: true, id: pkgName };
         }
 
+        if (pkgName === 'rsvp') {
+          return { external: true, id: pkgName };
+        }
+
         if (isExternal?.(source)) {
           return { external: true, id: source };
         }
@@ -550,9 +554,6 @@ function packageMeta() {
 }
 
 const allowedCycles = [
-  // external and not causing problems
-  'node_modules/rsvp/lib/rsvp',
-
   // TODO: these would be good to fix once they're in this repo
   'packages/@glimmer/debug',
   'packages/@glimmer/runtime',
