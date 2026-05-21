@@ -8,3 +8,6 @@ packages:
   - 'packages/*/*/test'
   - 'smoke-tests/*'
   - 'tests/*'
+
+patchedDependencies:
+  ember-cli@6.12.0: patches/ember-cli@6.12.0.patch
